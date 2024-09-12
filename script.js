@@ -1,23 +1,22 @@
-async function executeTrade(symbol, side, quantity) {
-    try {
-        const response = await fetch('https://your-vercel-domain.vercel.app/api/trade', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ symbol, side, quantity })
-        });
+let tradeActive = false;
+let tradeAmount = 0;
+let tradeInProgress = false;
 
-        if (!response.ok) {
-            throw new Error('Trade execution failed');
-        }
+document.getElementById('startButton').addEventListener('click', startTrading);
+document.getElementById('stopButton').addEventListener('click', stopTrading);
 
-        const result = await response.json();
-        console.log('Trade executed:', result);
-    } catch (error) {
-        console.error('Error executing trade:', error);
+function startTrading() {
+    tradeAmount = parseFloat(document.getElementById('tradeAmount').value);
+    if (tradeAmount > 0) {
+        tradeActive = true;
+        document.getElementById('tradeStatus').textContent = 'Trade Status: Active';
+        checkForSignal();
+    } else {
+        alert('Please enter a valid trade amount.');
     }
 }
 
-// Example usage:
-// executeTrade('BTCUSDT', 'BUY', 0.001);
+function stopTrading() {
+    tradeActive = false;
+    document.getElementById('tradeStatus').textContent = 'Trade Status: Stopped';
+}
