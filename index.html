@@ -7,37 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to the Trading Bot Website</h1>
-    <p>This website will collect data from Binance and build a trading bot for BTC/USD.</p>
+    <h1>Automated Trading Bot</h1>
+    <p>This bot will automatically execute trades based on signals.</p>
 
-    <!-- TradingView Widget -->
-    <div class="tradingview-widget-container">
-        <div id="tradingview_chart"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-        <script type="text/javascript">
-            new TradingView.widget({
-                "width": 980,
-                "height": 610,
-                "symbol": "BINANCE:BTCUSDT",
-                "interval": "1",
-                "timezone": "Etc/UTC",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "details": true,
-                "hotlist": true,
-                "calendar": true,
-                "studies": [
-                    "MAExp@tv-basicstudies",  // Exponential Moving Average (EMA)
-                    "MASimple@tv-basicstudies"  // Simple Moving Average (SMA)
-                ],
-                "container_id": "tradingview_chart"
-            });
-        </script>
-    </div>
+    <!-- Input for trade amount -->
+    <label for="tradeAmount">Enter trade amount (e.g., 0.001 BTC):</label>
+    <input type="number" id="tradeAmount" name="tradeAmount" step="0.0001" min="0">
+
+    <!-- Buttons to control the bot -->
+    <button id="startButton">Start Trading</button>
+    <button id="stopButton">Stop Trading</button>
+
+    <!-- Display trade status -->
+    <p id="tradeStatus">Trade Status: Idle</p>
 
     <script src="script.js"></script>
 </body>
