@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Place an order on Binance
+        // Place a market order on Binance
         const order = await binance.order({
             symbol: symbol,
             side: side, // 'BUY' or 'SELL'
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             type: 'MARKET' // Market order, you can change this to 'LIMIT' if needed
         });
 
-        // Send back the order details
+        // Send back the order details, including the status
         res.status(200).json(order);
     } catch (error) {
         console.error('Error executing trade:', error);
