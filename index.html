@@ -10,9 +10,12 @@
     <h1>Automated Trading Bot</h1>
     <p>This bot will automatically execute trades based on signals.</p>
 
-    <!-- Input for trade amount -->
-    <label for="tradeAmount">Enter trade amount (e.g., 0.001 BTC):</label>
-    <input type="number" id="tradeAmount" name="tradeAmount" step="0.0001" min="0">
+    <!-- Input for trade amount in USD -->
+    <label for="tradeAmount">Enter trade amount in USD:</label>
+    <input type="number" id="tradeAmount" name="tradeAmount" step="0.01" min="0">
+
+    <!-- Display the suggested buy/sell price -->
+    <p id="suggestedPrice">Suggested Price: N/A</p>
 
     <!-- Buttons to control the bot -->
     <button id="startButton">Start Trading</button>
