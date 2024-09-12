@@ -2,6 +2,7 @@
 let tradeActive = false;
 let tradeAmount = 0;
 let tradeInProgress = false;
+let lastTradeDetails = 'None';
 
 // Event listeners for the start and stop buttons
 document.getElementById('startButton').addEventListener('click', startTrading);
@@ -68,6 +69,10 @@ async function executeTrade(symbol, side, quantity) {
         const result = await response.json();
         console.log('Trade executed:', result);
         tradeInProgress = false;
+
+        // Update trade details
+        lastTradeDetails = `${side} ${quantity} of ${symbol} at price ${result.fills[0].price}`;
+        document.getElementById('tradeDetails').textContent = `Trade Details: ${lastTradeDetails}`;
     } catch (error) {
         console.error('Error executing trade:', error);
         document.getElementById('tradeStatus').textContent = 'Trade Status: Error';
