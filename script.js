@@ -26,39 +26,40 @@ function stopTrading() {
     document.getElementById('tradeStatus').textContent = 'Trade Status: Stopped';
 }
 
-// Function to check for buy/sell signals
+// Function to check for buy/sell signals based on an indicator (e.g., MACD or RSI)
 async function checkForSignal() {
     if (!tradeActive || tradeInProgress) return;
 
     // Fetch the current BTC price
     const currentPrice = await getCurrentBTCPrice();
 
-    // Example signal check (replace with your real signal logic)
-    const buySignal = true;  // Replace with your buy signal logic
-    const sellSignal = false; // Replace with your sell signal logic
+    // Fetch the indicator's signal (replace with actual logic)
+    const signal = await getTradingSignal();
 
-    if (buySignal) {
+    if (signal === 'BUY') {
         tradeInProgress = true;
         const btcAmount = tradeAmountUSD / currentPrice;
         document.getElementById('suggestedPrice').textContent = `Suggested Buy Price: $${currentPrice.toFixed(2)}`;
         await executeTrade('BTCUSDT', 'BUY', btcAmount, currentPrice);
         document.getElementById('tradeStatus').textContent = 'Trade Status: Bought BTC';
-    } else if (sellSignal) {
+    } else if (signal === 'SELL') {
         tradeInProgress = true;
-        const btcAmount = tradeAmountUSD / currentPrice; // This assumes you're selling the same amount in USD
+        const btcAmount = tradeAmountUSD / currentPrice;
         document.getElementById('suggestedPrice').textContent = `Suggested Sell Price: $${currentPrice.toFixed(2)}`;
         await executeTrade('BTCUSDT', 'SELL', btcAmount, currentPrice);
         document.getElementById('tradeStatus').textContent = 'Trade Status: Sold BTC';
+    } else {
+        document.getElementById('suggestedPrice').textContent = `No clear signal. Waiting for next signal...`;
     }
 
-    // Simulate checking for signal every few seconds (this should be based on real-time data)
+    // Check again after a delay
     setTimeout(() => {
         tradeInProgress = false;
         checkForSignal();
     }, 10000); // Check every 10 seconds (adjust as needed)
 }
 
-// Function to execute the trade
+// Function to execute the trade on Binance
 async function executeTrade(symbol, side, quantity, suggestedPrice) {
     try {
         const response = await fetch('https://your-vercel-domain.vercel.app/api/trade', {
@@ -80,6 +81,14 @@ async function executeTrade(symbol, side, quantity, suggestedPrice) {
         const executionPrice = result.fills[0].price;
         lastTradeDetails = `${side} ${quantity.toFixed(6)} BTC at suggested price $${suggestedPrice.toFixed(2)}, executed at $${executionPrice}`;
         document.getElementById('tradeDetails').textContent = `Trade Details: ${lastTradeDetails}`;
+
+        // Confirm trade execution status
+        if (result.status === 'FILLED') {
+            document.getElementById('tradeStatus').textContent = `Trade Executed Successfully at $${executionPrice}`;
+        } else {
+            document.getElementById('tradeStatus').textContent = `Trade Status: ${result.status}`;
+        }
+
         tradeInProgress = false;
     } catch (error) {
         console.error('Error executing trade:', error);
@@ -96,5 +105,19 @@ async function getCurrentBTCPrice() {
     } catch (error) {
         console.error('Error fetching BTC price:', error);
         return 0;
+    }
+}
+
+// Function to get the trading signal based on an indicator (replace with actual logic)
+async function getTradingSignal() {
+    // Example placeholder logic (replace with actual indicator logic)
+    // Here you could fetch data from a service or use a library to calculate MACD, RSI, etc.
+    const randomSignal = Math.random();
+    if (randomSignal > 0.5) {
+        return 'BUY';
+    } else if (randomSignal < 0.5) {
+        return 'SELL';
+    } else {
+        return 'HOLD';
     }
 }
