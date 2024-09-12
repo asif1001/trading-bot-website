@@ -7,28 +7,23 @@ async function fetchBTCPrice() {
     try {
         const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
         const data = await response.json();
-        console.log('BTC/USD Price:', data.price);
-        // Display the price on the webpage
-        document.getElementById('btc-price').textContent = `BTC/USD: $${data.price}`;
+        const price = parseFloat(data.price);
+        console.log('BTC/USD Price:', price);
+
+        document.getElementById('btc-price').textContent = `BTC/USD: $${price}`;
+
+        // Basic trading logic example
+        if (price > 30000) {
+            console.log('Sell Signal');
+            document.getElementById('btc-price').textContent += ' (Sell Signal)';
+        } else {
+            console.log('Buy Signal');
+            document.getElementById('btc-price').textContent += ' (Buy Signal)';
+        }
     } catch (error) {
         console.error('Error fetching BTC price:', error);
     }
 }
 
-// Function to fetch Gold/USD price data from Binance
-async function fetchGoldPrice() {
-    try {
-        // Binance does not directly support Gold/USD, but you could use a proxy like XAUUSD
-        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=XAUUSD');
-        const data = await response.json();
-        console.log('Gold/USD Price:', data.price);
-        // Display the price on the webpage
-        document.getElementById('gold-price').textContent = `Gold/USD: $${data.price}`;
-    } catch (error) {
-        console.error('Error fetching Gold price:', error);
-    }
-}
-
-// Call the functions to fetch data
+// Call the function to fetch data on page load
 fetchBTCPrice();
-fetchGoldPrice();
