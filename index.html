@@ -8,11 +8,12 @@
 </head>
 <body>
     <h1>Welcome to the Trading Bot Website</h1>
-    <p>This website will collect data from Binance and build a trading bot for BTC/USD and Gold/USD.</p>
+    <p>This website will collect data from Binance and build a trading bot for BTC/USD.</p>
 
     <h2>Live Prices</h2>
     <p id="btc-price">BTC/USD: Loading...</p>
-    <p id="gold-price">Gold/USD: Loading...</p>
+
+    <button onclick="fetchBTCPrice();">Refresh Prices</button>
 
     <script src="script.js"></script>
 </body>
