@@ -10,10 +10,33 @@
     <h1>Welcome to the Trading Bot Website</h1>
     <p>This website will collect data from Binance and build a trading bot for BTC/USD.</p>
 
-    <h2>Live Prices</h2>
-    <p id="btc-price">BTC/USD: Loading...</p>
-
-    <button onclick="fetchBTCPrice();">Refresh Prices</button>
+    <!-- TradingView Widget -->
+    <div class="tradingview-widget-container">
+        <div id="tradingview_chart"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+            new TradingView.widget({
+                "width": 980,
+                "height": 610,
+                "symbol": "BINANCE:BTCUSDT",
+                "interval": "1",
+                "timezone": "Etc/UTC",
+                "theme": "light",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "details": true,
+                "hotlist": true,
+                "calendar": true,
+                "studies": [
+                    "RSI@tv-basicstudies"
+                ],
+                "container_id": "tradingview_chart"
+            });
+        </script>
+    </div>
 
     <script src="script.js"></script>
 </body>
