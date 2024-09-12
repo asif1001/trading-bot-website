@@ -1,26 +1,30 @@
-const Binance = require('node-binance-api');
-
-const binance = new Binance().options({
-    APIKEY: process.env.BINANCE_API_KEY,
-    APISECRET: process.env.BINANCE_API_SECRET
-});
+const fetch = require('node-fetch');
 
 export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Method not allowed' });
-    }
-
-    const { symbol, side, quantity } = req.body;
+    const { side, quantity } = req.body;
 
     try {
-        const order = await binance.order({
-            symbol: symbol,
-            side: side,  // 'BUY' or 'SELL'
-            quantity: quantity,
-            type: 'MARKET'  // or 'LIMIT', etc.
+        const response = await fetch('https://your-exness-api-endpoint', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${process.env.EXNESS_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                // Include the necessary data based on Exness API requirements
+                side,
+                quantity
+            })
         });
-        res.status(200).json(order);
+
+        if (!response.ok) {
+            throw new Error('Trade execution failed');
+        }
+
+        const result = await response.json();
+        res.status(200).json(result); // Return the result to the client-side script.js
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error executing trade:', error);
+        res.status(500).json({ error: 'Trade execution failed' });
     }
 }
