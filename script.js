@@ -79,23 +79,24 @@ async function executeTrade(symbol, side, quantity, suggestedPrice) {
         const result = await response.json();
         console.log('Trade executed:', result);
 
-        // Update trade details
-        const executionPrice = result.fills[0].price;
-        lastTradeDetails = `${side} ${quantity.toFixed(6)} BTC at suggested price $${suggestedPrice.toFixed(2)}, executed at $${executionPrice}`;
-        document.getElementById('tradeDetails').textContent = `Trade Details: ${lastTradeDetails}`;
-
-        // Confirm trade execution status
+        // Check if the trade was filled
         if (result.status === 'FILLED') {
-            document.getElementById('tradeStatus').textContent = `Trade Executed Successfully at $${executionPrice}`;
+            const executionPrice = parseFloat(result.fills[0].price);
+            lastTradeDetails = `${side} ${quantity.toFixed(6)} BTC at suggested price $${suggestedPrice.toFixed(2)}, executed at $${executionPrice.toFixed(2)}`;
+            document.getElementById('tradeDetails').textContent = `Trade Details: ${lastTradeDetails}`;
+            document.getElementById('tradeStatus').textContent = `Trade Executed Successfully at $${executionPrice.toFixed(2)}`;
+
+            // Record the transaction
             recordTransaction(side, suggestedPrice, executionPrice, quantity, tradeAmountUSD);
         } else {
             document.getElementById('tradeStatus').textContent = `Trade Status: ${result.status}`;
         }
 
-        tradeInProgress = false;
     } catch (error) {
         console.error('Error executing trade:', error);
         document.getElementById('tradeStatus').textContent = 'Trade Status: Error';
+    } finally {
+        tradeInProgress = false;
     }
 }
 
